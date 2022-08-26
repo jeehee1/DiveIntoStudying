@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
+<% layout('../layouts/boilerplate') %>
     <h1>Studying Group</h1>
-    <% for(let group of groups) { %>
-        <div>
-            <ul>
-                <li>title: <%=group.title %>
-                </li>
-                <li>subject: <%=group.subject%>
-                </li>
-                <li>locaiton: <%=group.location%>
-                </li>
-            </ul>
-        </div>
-        <% } %>
-</body>
-
-</html>
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+        <% for(let group of groups) { %>
+            <div class="col">
+                <div class="card">
+                    <!-- <img src=" ..." class="card-img-top" alt="..."> -->
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=group.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%=group.subject%>
+                        </p>
+                        <p class="card-text">
+                            <%=group.location%>
+                        </p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
