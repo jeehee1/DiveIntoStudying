@@ -13,8 +13,6 @@ async function main() {
     console.log('CONNECTED ON MONGO DATABASE!')
 }
 
-
-
 const app = express();
 
 app.engine('ejs', engine);
@@ -39,6 +37,15 @@ app.post('/groups', async (req, res) => {
     await newGroup.save();
     const groups = await Group.find({});
     res.render('index', { groups });
+})
+
+app.get('/groups/:id', async (req, res) => {
+    // const { id } = req.params;
+    // console.log(id);
+    // const objectId = mongoose.Types.ObjectId(req.params.id)
+    const group = await Group.findById(req.params.id);
+    console.log(group);
+    res.render('show', { group });
 })
 
 app.listen(3000, (req, res) => {
