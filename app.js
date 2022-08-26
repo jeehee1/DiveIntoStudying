@@ -2,6 +2,7 @@ const express = require('express');
 const engine = require('ejs-mate');
 const path = require('path')
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 main().catch(err => console.log(err));
 
@@ -31,17 +32,31 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname + '/views'));
 app.set('view engine', 'ejs');
 
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
+
 app.get('/', async (req, res) => {
     // const testData = new Group({
-    //     title: "awefawefwa",
-    //     subject: "wefawe",
+    //     title: "asfw",
+    //     subject: "Science",
     //     location: "NY",
-    //     meeting_times: 2,
+    //     meeting_times: 1,
     //     online: 'n',
-    //     description: 'ksfj;walkhjgl;khw;alkgjw'
+    //     description: 'ksfj;asgawegwaefawwalkhjgl;khw;alkgjw'
     // });
     // await testData.save();
     console.log('saved')
+    const groups = await Group.find({});
+    res.render('index', { groups });
+})
+
+app.get('/group/new', (req, res) => {
+    res.render('new');
+})
+
+app.post('/group', async (req, res) => {
+    const newGroup = new Group(req.body);
+    await newGroup.save();
     const groups = await Group.find({});
     res.render('index', { groups });
 })
