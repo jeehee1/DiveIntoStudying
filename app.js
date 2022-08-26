@@ -3,6 +3,8 @@ const engine = require('ejs-mate');
 const path = require('path')
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const Group = require('./models/groups');
+
 
 main().catch(err => console.log(err));
 
@@ -11,19 +13,7 @@ async function main() {
     console.log('CONNECTED ON MONGO DATABASE!')
 }
 
-const groupSchema = new mongoose.Schema({
-    title: String,
-    subject: String,
-    location: String,
-    meeting_times: Number,
-    online: {
-        type: String,
-        enum: ['y', 'n']
-    },
-    description: String
-})
 
-const Group = mongoose.model('Group', groupSchema);
 
 const app = express();
 
@@ -36,25 +26,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 app.get('/', async (req, res) => {
-    // const testData = new Group({
-    //     title: "asfw",
-    //     subject: "Science",
-    //     location: "NY",
-    //     meeting_times: 1,
-    //     online: 'n',
-    //     description: 'ksfj;asgawegwaefawwalkhjgl;khw;alkgjw'
-    // });
-    // await testData.save();
-    console.log('saved')
     const groups = await Group.find({});
     res.render('index', { groups });
 })
 
-app.get('/group/new', (req, res) => {
+app.get('/groups/new', (req, res) => {
     res.render('new');
 })
 
-app.post('/group', async (req, res) => {
+app.post('/groups', async (req, res) => {
     const newGroup = new Group(req.body);
     await newGroup.save();
     const groups = await Group.find({});
