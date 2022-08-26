@@ -10,29 +10,33 @@
 
 <body>
     <h1>Studying Group</h1>
-    <div>
-        <ul>
+    <% for(let group of groups) { %>
+        <div>
+            <ul>
+                <li>title: <%=group.title %>
+                </li>
+                <li>subject: <%=group.subject%>
+                </li>
+                <li>locaiton: <%=group.location%>
+                </li>
+            </ul>
+        </div>
+        <% } %>
+            <div>
+                <ul>
+                    <li>title: wkejfljawef</li>
+                    <li>subject: math</li>
+                    <li>locaiton: California</li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li>title: wkejfljawef</li>
+                    <li>subject: math</li>
+                    <li>locaiton: California</li>
+                </ul>
 
-            <li>title: wkejfljawef</li>
-            <li>subject: math</li>
-            <li>locaiton: California</li>
-        </ul>
-    </div>
-    <div>
-        <ul>
-            <li>title: wkejfljawef</li>
-            <li>subject: math</li>
-            <li>locaiton: California</li>
-        </ul>
-    </div>
-    <div>
-        <ul>
-            <li>title: wkejfljawef</li>
-            <li>subject: math</li>
-            <li>locaiton: California</li>
-        </ul>
-
-    </div>
+            </div>
 </body>
 
 </html>

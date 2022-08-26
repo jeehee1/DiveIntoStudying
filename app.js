@@ -31,8 +31,19 @@ app.engine('ejs', engine);
 app.set('views', path.join(__dirname + '/views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async (req, res) => {
+    // const testData = new Group({
+    //     title: "awefawefwa",
+    //     subject: "wefawe",
+    //     location: "NY",
+    //     meeting_times: 2,
+    //     online: 'n',
+    //     description: 'ksfj;walkhjgl;khw;alkgjw'
+    // });
+    // await testData.save();
+    console.log('saved')
+    const groups = await Group.find({});
+    res.render('index', { groups });
 })
 
 app.listen(3000, (req, res) => {
