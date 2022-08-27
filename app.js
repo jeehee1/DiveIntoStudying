@@ -23,7 +23,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-app.get('/', async (req, res) => {
+app.get('/groups', async (req, res) => {
     const groups = await Group.find({});
     res.render('index', { groups });
 })
@@ -34,15 +34,15 @@ app.get('/groups/new', (req, res) => {
 
 app.post('/groups', async (req, res) => {
     const newGroup = new Group(req.body);
+    if (req.body.online !== 'y') {
+        newGroup.online = 'n'
+    };
     await newGroup.save();
     const groups = await Group.find({});
     res.render('index', { groups });
 })
 
 app.get('/groups/:id', async (req, res) => {
-    // const { id } = req.params;
-    // console.log(id);
-    // const objectId = mongoose.Types.ObjectId(req.params.id)
     const group = await Group.findById(req.params.id);
     res.render('show', { group });
 })
