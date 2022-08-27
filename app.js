@@ -44,7 +44,6 @@ app.get('/groups/:id', async (req, res) => {
     // console.log(id);
     // const objectId = mongoose.Types.ObjectId(req.params.id)
     const group = await Group.findById(req.params.id);
-    console.log(group);
     res.render('show', { group });
 })
 
