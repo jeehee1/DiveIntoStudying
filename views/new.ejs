@@ -1,32 +1,37 @@
 <% layout('../layouts/boilerplate') %>
-    <form action="/groups" method="POST">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="title">
+    <div class="row">
+        <h1 class="text-center my-5">New Study Group</h1>
+        <div class="col-10 offset-1 col-md-8 offset-md-2">
+            <form action="/groups" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                </div>
+                <div class="mb-3">
+                    <input class="form-check-input" type="checkbox" name="online" value="y" id="online">
+                    <label class="form-check-label" for="online">
+                        Online
+                    </label>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <label for="subject">Subject</label>
+                        <input type="text" class="form-control" placeholder="subject" name="subject" id="subject">
+                    </div>
+                    <div class="col-4">
+                        <label for="times">Times(w)</label>
+                        <input type="text" class="form-control" placeholder="/week" name="times" id="times">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" placeholder="location">
+                </div>
+                <div class="mb-3">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <button class="btn btn-success">Submit</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <input class="form-check-input" type="checkbox" name="online" value="y" id="online">
-            <label class="form-check-label" for="online">
-                Online
-            </label>
-        </div>
-        <div class="row mb-3">
-            <div class="col-8">
-                <label for="subject">Subject</label>
-                <input type="text" class="form-control" placeholder="subject" name="subject" id="subject">
-            </div>
-            <div class="col-4">
-                <label for="times">Times (/week)</label>
-                <input type="text" class="form-control" placeholder="times" name="times" id="times">
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location" placeholder="location">
-        </div>
-        <div class="mb-3">
-            <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description"></textarea>
-        </div>
-        <button class="btn btn-success">Submit</button>
-    </form>
+    </div>
