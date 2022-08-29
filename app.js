@@ -33,6 +33,11 @@ app.get("/groups/new", (req, res) => {
   res.render("new");
 });
 
+app.get("/groups/:id", async (req, res) => {
+  const group = await Group.findById(req.params.id);
+  res.render("show", { group });
+});
+
 app.get("/groups/:subject", async (req, res) => {
   const { subject } = req.params;
   const groups = await Group.find({ subject: subject });
@@ -53,11 +58,6 @@ app.post("/groups", async (req, res) => {
   await newGroup.save();
   const groups = await Group.find({});
   res.render("index", { groups });
-});
-
-app.get("/groups/:id", async (req, res) => {
-  const group = await Group.findById(req.params.id);
-  res.render("show", { group });
 });
 
 app.put("/groups/:id", async (req, res) => {
