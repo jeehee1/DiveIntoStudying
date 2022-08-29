@@ -1,0 +1,19 @@
+<% layout('../layouts/boilerplate') %>
+<h1 class="mb-3"><%=subject %> Study Group</h1>
+<div class="container">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    <% for(let group of groups) { %>
+    <div class="col">
+      <div class="card">
+        <!-- <img src=" ..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+          <h5 class="card-title"><%=group.title %></h5>
+          <p class="card-text"><%=group.subject%></p>
+          <p class="card-text"><%=group.location%></p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>

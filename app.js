@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const Group = require("./models/groups");
 const { groupEnd } = require("console");
+const { subjects } = require("./datas/seedHelpers");
 
 main().catch((err) => console.log(err));
 
@@ -25,11 +26,18 @@ app.use(methodOverride("_method"));
 
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
-  res.render("index", { groups });
+  res.render("index", { groups, subjects });
 });
 
 app.get("/groups/new", (req, res) => {
   res.render("new");
+});
+
+app.get("/groups/:subject", async (req, res) => {
+  const { subject } = req.params;
+  const groups = await Group.find({ subject: subject });
+  console.log(groups);
+  res.render("subjects", { groups, subject });
 });
 
 app.get("/groups/:id/edit", async (req, res) => {
