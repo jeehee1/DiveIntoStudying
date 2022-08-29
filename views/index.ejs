@@ -1,7 +1,7 @@
 <% layout('../layouts/boilerplate') %>
 <h1 class="mb-5">Study Group</h1>
 <% for(const subject of subjects) { %>
-<a href="/groups/<%=subject %>"><%=subject %> </a>
+<a href="/groups/subjects/<%=subject %>"><%=subject %> </a>
 <% } %>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
   <% for(let group of groups) { %>

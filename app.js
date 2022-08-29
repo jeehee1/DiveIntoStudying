@@ -23,6 +23,7 @@ app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
@@ -33,16 +34,16 @@ app.get("/groups/new", (req, res) => {
   res.render("new");
 });
 
-app.get("/groups/:id", async (req, res) => {
-  const group = await Group.findById(req.params.id);
-  res.render("show", { group });
-});
-
-app.get("/groups/:subject", async (req, res) => {
+app.get("/groups/subjects/:subject", async (req, res) => {
   const { subject } = req.params;
   const groups = await Group.find({ subject: subject });
   console.log(groups);
   res.render("subjects", { groups, subject });
+});
+
+app.get("/groups/:id", async (req, res) => {
+  const group = await Group.findById(req.params.id);
+  res.render("show", { group });
 });
 
 app.get("/groups/:id/edit", async (req, res) => {
