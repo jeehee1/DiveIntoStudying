@@ -2,7 +2,7 @@
 <div class="row">
   <h1 class="text-center my-5">Edit Study Group</h1>
   <div class="col-10 offset-1 col-md-8 offset-md-2">
-    <form action="/groups/<%=group._id%>/?_method=PUT" method="POST">
+    <form action="/groups/<%=group._id%>?_method=PUT" method="POST">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -73,8 +73,7 @@
       <div class="mb-3">
         <label for="description">Description</label>
         <textarea class="form-control" id="description" name="description">
-<%=group.description %>
-</textarea
+<%=group.description %></textarea
         >
       </div>
       <button class="btn btn-success">Submit</button>

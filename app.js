@@ -4,6 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const Group = require("./models/groups");
+const { groupEnd } = require("console");
 
 main().catch((err) => console.log(err));
 
@@ -52,7 +53,18 @@ app.get("/groups/:id", async (req, res) => {
 });
 
 app.put("/groups/:id", async (req, res) => {
-  const group = await Group.findById(req.params.id);
+  console.log(req.body);
+  const { id } = req.params;
+  const groupInfo = req.body;
+  if (!groupInfo.online) {
+    const group = await Group.findByIdAndUpdate(id, {
+      ...groupInfo,
+      online: "n",
+    });
+  } else {
+    const group = await Group.findByIdAndUpdate(id, groupInfo);
+  }
+  res.redirect(`/groups/${id}`);
 });
 
 app.listen(3000, (req, res) => {
