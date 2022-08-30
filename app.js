@@ -6,6 +6,8 @@ const methodOverride = require("method-override");
 const Group = require("./models/groups");
 const { groupEnd } = require("console");
 const { subjects } = require("./datas/seedHelpers");
+const ExpressError = require("./utils/expressError");
+const catchAsync = require("./utils/catchAsync");
 
 main().catch((err) => console.log(err));
 
@@ -34,46 +36,72 @@ app.get("/groups/new", (req, res) => {
   res.render("new");
 });
 
-app.get("/groups/subjects/:subject", async (req, res) => {
-  const { subject } = req.params;
-  const groups = await Group.find({ subject: subject });
-  console.log(groups);
-  res.render("subjects", { groups, subject });
+app.get(
+  "/groups/subjects/:subject",
+  catchAsync(async (req, res) => {
+    const { subject } = req.params;
+    const groups = await Group.find({ subject: subject });
+    res.render("subjects", { groups, subject });
+  })
+);
+
+app.get(
+  "/groups/:id",
+  catchAsync(async (req, res) => {
+    const group = await Group.findById(req.params.id);
+    res.render("show", { group });
+  })
+);
+
+app.get(
+  "/groups/:id/edit",
+  catchAsync(async (req, res) => {
+    const group = await Group.findById(req.params.id);
+    res.render("edit", { group });
+  })
+);
+
+app.post(
+  "/groups",
+  catchAsync(async (req, res) => {
+    const newGroup = new Group(req.body);
+    if (req.body.online !== "y") {
+      newGroup.online = "n";
+    }
+    await newGroup.save();
+    const groups = await Group.find({});
+    res.render("index", { groups });
+  })
+);
+
+app.put(
+  "/groups/:id",
+  catchAsync(async (req, res) => {
+    console.log(req.body);
+    const { id } = req.params;
+    const groupInfo = req.body;
+    if (!groupInfo.online) {
+      const group = await Group.findByIdAndUpdate(id, {
+        ...groupInfo,
+        online: "n",
+      });
+    } else {
+      const group = await Group.findByIdAndUpdate(id, groupInfo);
+    }
+    res.redirect(`/groups/${id}`);
+  })
+);
+
+app.all("*", (req, res, next) => {
+  next(new ExpressError("PAGE NOT FOUND", 404));
 });
 
-app.get("/groups/:id", async (req, res) => {
-  const group = await Group.findById(req.params.id);
-  res.render("show", { group });
-});
-
-app.get("/groups/:id/edit", async (req, res) => {
-  const group = await Group.findById(req.params.id);
-  res.render("edit", { group });
-});
-
-app.post("/groups", async (req, res) => {
-  const newGroup = new Group(req.body);
-  if (req.body.online !== "y") {
-    newGroup.online = "n";
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) {
+    err.message = "SOMETHING WENT WRONG!";
   }
-  await newGroup.save();
-  const groups = await Group.find({});
-  res.render("index", { groups });
-});
-
-app.put("/groups/:id", async (req, res) => {
-  console.log(req.body);
-  const { id } = req.params;
-  const groupInfo = req.body;
-  if (!groupInfo.online) {
-    const group = await Group.findByIdAndUpdate(id, {
-      ...groupInfo,
-      online: "n",
-    });
-  } else {
-    const group = await Group.findByIdAndUpdate(id, groupInfo);
-  }
-  res.redirect(`/groups/${id}`);
+  res.status(statusCode).render("error", { err });
 });
 
 app.listen(3000, (req, res) => {
