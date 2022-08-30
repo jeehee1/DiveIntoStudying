@@ -2,8 +2,11 @@ const express = require("express");
 const engine = require("ejs-mate");
 const path = require("path");
 const mongoose = require("mongoose");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
 const Group = require("./models/groups");
+const User = require("./models/users");
 const { groupEnd } = require("console");
 const { subjects } = require("./datas/seedHelpers");
 const ExpressError = require("./utils/expressError");
@@ -26,6 +29,13 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
@@ -95,6 +105,18 @@ app.put(
 app.get("/register", (req, res) => {
   res.render("users/register");
 });
+
+app.post(
+  "/register",
+  catchAsync(async (req, res) => {
+    console.log(req.body);
+    const { username, password, email } = req.body;
+    const user = new User({ username, email });
+    const newUser = await User.register(user, password);
+    console.log(newUser);
+    res.send("successfully registered!");
+  })
+);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("PAGE NOT FOUND", 404));
