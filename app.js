@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
-  res.render("index", { groups, subjects });
+  res.render("studygroups/index", { groups, subjects });
 });
 
 app.get("/groups/new", (req, res) => {
@@ -41,7 +41,7 @@ app.get(
   catchAsync(async (req, res) => {
     const { subject } = req.params;
     const groups = await Group.find({ subject: subject });
-    res.render("subjects", { groups, subject });
+    res.render("studygroups/subjects", { groups, subject });
   })
 );
 
@@ -49,7 +49,7 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    res.render("show", { group });
+    res.render("studygroups/show", { group });
   })
 );
 
@@ -57,7 +57,7 @@ app.get(
   "/groups/:id/edit",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    res.render("edit", { group });
+    res.render("studygroups/edit", { group });
   })
 );
 
@@ -70,7 +70,7 @@ app.post(
     }
     await newGroup.save();
     const groups = await Group.find({});
-    res.render("index", { groups });
+    res.render("studygroups/index", { groups });
   })
 );
 
@@ -91,6 +91,10 @@ app.put(
     res.redirect(`/groups/${id}`);
   })
 );
+
+app.get("/register", (req, res) => {
+  res.render("users/register");
+});
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("PAGE NOT FOUND", 404));
