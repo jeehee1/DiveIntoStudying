@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
+const session = require("express-session");
+const flash = require("connect-flash");
 const Group = require("./models/groups");
 const User = require("./models/users");
 const { groupEnd } = require("console");
@@ -37,13 +39,35 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+const sessionConfig = {
+  name: "session",
+  secret: "thisshouldbemoredifficult",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
-  res.render("studygroups/index", { groups, subjects });
+  res.render("groups/index", { groups, subjects });
 });
 
 app.get("/groups/new", (req, res) => {
-  res.render("new");
+  res.render("groups/new");
 });
 
 app.get(
@@ -51,7 +75,7 @@ app.get(
   catchAsync(async (req, res) => {
     const { subject } = req.params;
     const groups = await Group.find({ subject: subject });
-    res.render("studygroups/subjects", { groups, subject });
+    res.render("groups/subjects", { groups, subject });
   })
 );
 
@@ -59,7 +83,7 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    res.render("studygroups/show", { group });
+    res.render("groups/show", { group });
   })
 );
 
@@ -67,7 +91,7 @@ app.get(
   "/groups/:id/edit",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    res.render("studygroups/edit", { group });
+    res.render("groups/edit", { group });
   })
 );
 
@@ -79,8 +103,8 @@ app.post(
       newGroup.online = "n";
     }
     await newGroup.save();
-    const groups = await Group.find({});
-    res.render("studygroups/index", { groups });
+    req.flash("success", "Study Group has been succesfully created!");
+    res.redirect(`groups/${newGroup._id}`);
   })
 );
 
@@ -98,6 +122,7 @@ app.put(
     } else {
       const group = await Group.findByIdAndUpdate(id, groupInfo);
     }
+    req.flash("success", "Study Group has been succesfully updated!");
     res.redirect(`/groups/${id}`);
   })
 );
@@ -130,6 +155,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err });
 });
 
-app.listen(3000, (req, res) => {
-  console.log("CONNECTED ON PORT 3000");
+app.listen(8080, (req, res) => {
+  console.log("CONNECTED ON PORT 8080");
 });
