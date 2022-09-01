@@ -2,7 +2,12 @@
 <div class="row">
   <h1 class="text-center my-5">Edit Study Group</h1>
   <div class="col-10 offset-1 col-md-8 offset-md-2">
-    <form action="/groups/<%=group._id%>?_method=PUT" method="POST">
+    <form
+      action="/groups/<%=group._id%>?_method=PUT"
+      method="POST"
+      class="needs-validation"
+      novalidate
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -12,6 +17,7 @@
           name="title"
           placeholder="title"
           value="<%=group.title %>"
+          required
         />
       </div>
       <div class="mb-3">
@@ -45,6 +51,7 @@
             name="subject"
             id="subject"
             value="<%=group.subject %>"
+            required
           />
         </div>
         <div class="col-4">
@@ -56,6 +63,7 @@
             name="times"
             id="times"
             value="<%=group.times %>"
+            required
           />
         </div>
       </div>
@@ -68,11 +76,17 @@
           name="location"
           placeholder="location"
           value="<%=group.location %>"
+          required
         />
       </div>
       <div class="mb-3">
         <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="description">
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          required
+        >
 <%=group.description %></textarea
         >
       </div>
