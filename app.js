@@ -139,7 +139,7 @@ app.post(
     const user = new User({ username, email });
     const newUser = await User.register(user, password);
     console.log(newUser);
-    res.send("successfully registered!");
+    res.redirect("groups");
   })
 );
 
