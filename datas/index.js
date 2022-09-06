@@ -29,6 +29,7 @@ const seedDB = async () => {
       online: `${yn[ranYn]}`,
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio ex repellendus labore rem eveniet sequi, repellat aliquam quia assumenda, nobis eos dolorem necessitatibus placeat tenetur error deleniti consectetur quam similique?",
+      leader: "6316eb8c584ca4c72e2e744d",
     });
     await group.save();
   }

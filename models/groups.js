@@ -16,6 +16,10 @@ const groupSchema = new Schema({
     enum: ["y", "n"],
   },
   description: String,
+  leader: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 module.exports = mongoose.model("Group", groupSchema);
