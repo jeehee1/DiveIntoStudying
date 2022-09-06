@@ -131,6 +131,10 @@ app.get("/register", (req, res) => {
   res.render("users/register");
 });
 
+app.get("/login", (req, res) => {
+  res.render("users/login");
+});
+
 app.post(
   "/register",
   catchAsync(async (req, res) => {
