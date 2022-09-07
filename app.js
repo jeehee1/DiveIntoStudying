@@ -32,13 +32,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// use static authenticate method of model in LocalStrategy
-passport.use(new LocalStrategy(User.authenticate()));
-
-// use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 const sessionConfig = {
   name: "session",
   secret: "thisshouldbemoredifficult",
@@ -55,6 +48,25 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+const isLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    req.session.returnTo = req.originalUrl;
+    req.flash("error", "You must be signed in first");
+    return res.redirect("/login");
+  } else {
+    next();
+  }
+};
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -66,7 +78,7 @@ app.get("/groups", async (req, res) => {
   res.render("groups/index", { groups, subjects });
 });
 
-app.get("/groups/new", (req, res) => {
+app.get("/groups/new", isLoggedIn, (req, res) => {
   res.render("groups/new");
 });
 
@@ -89,6 +101,7 @@ app.get(
 
 app.get(
   "/groups/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
     res.render("groups/edit", { group });
@@ -97,6 +110,7 @@ app.get(
 
 app.post(
   "/groups",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const newGroup = new Group(req.body);
     if (req.body.online !== "y") {
@@ -110,6 +124,7 @@ app.post(
 
 app.put(
   "/groups/:id",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     console.log(req.body);
     const { id } = req.params;
@@ -152,7 +167,9 @@ app.post(
     failureMessage: true,
   }),
   (req, res) => {
-    res.send("login succeeded : " + req.user.username);
+    req.flash("success", "Welcome Back!");
+    const redirectUrl = req.session.returnTo || "/groups";
+    res.redirect(redirectUrl);
   }
 );
 
