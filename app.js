@@ -173,7 +173,7 @@ app.post(
   }
 );
 
-app.post("/logout", (req, res) => {
+app.get("/logout", (req, res) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
