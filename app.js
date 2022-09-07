@@ -138,13 +138,22 @@ app.get("/login", (req, res) => {
 app.post(
   "/register",
   catchAsync(async (req, res) => {
-    console.log(req.body);
     const { username, password, email } = req.body;
     const user = new User({ username, email });
     const newUser = await User.register(user, password);
-    console.log(newUser);
-    res.redirect("groups");
+    res.redirect("/groups");
   })
+);
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureMessage: true,
+  }),
+  (req, res) => {
+    res.send("login succeeded : " + req.user.username);
+  }
 );
 
 app.all("*", (req, res, next) => {
