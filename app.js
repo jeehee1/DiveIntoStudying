@@ -13,6 +13,7 @@ const { groupEnd } = require("console");
 const { subjects } = require("./datas/seedHelpers");
 const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
+const { request } = require("https");
 
 main().catch((err) => console.log(err));
 
@@ -110,7 +111,6 @@ app.get(
 
 app.post(
   "/groups",
-  isLoggedIn,
   catchAsync(async (req, res) => {
     const newGroup = new Group(req.body);
     if (req.body.online !== "y") {
@@ -124,7 +124,6 @@ app.post(
 
 app.put(
   "/groups/:id",
-  isLoggedIn,
   catchAsync(async (req, res) => {
     console.log(req.body);
     const { id } = req.params;
@@ -165,9 +164,11 @@ app.post(
   passport.authenticate("local", {
     failureRedirect: "/login",
     failureMessage: true,
+    keepSessionInfo: true,
   }),
   (req, res) => {
     req.flash("success", "Welcome Back!");
+    console.log(req.session.returnTo);
     const redirectUrl = req.session.returnTo || "/groups";
     res.redirect(redirectUrl);
   }
