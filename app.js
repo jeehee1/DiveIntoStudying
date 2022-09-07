@@ -173,6 +173,15 @@ app.post(
   }
 );
 
+app.post("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/groups");
+  });
+});
+
 app.all("*", (req, res, next) => {
   next(new ExpressError("PAGE NOT FOUND", 404));
 });
