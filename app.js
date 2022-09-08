@@ -137,11 +137,11 @@ app.post(
 
 app.put(
   "/groups/:id",
+  validateGroups,
   catchAsync(async (req, res) => {
-    console.log(req.body);
     const { id } = req.params;
-    const groupInfo = req.body;
-    if (!groupInfo.online) {
+    const groupInfo = req.body.groups;
+    if (!groupInfo.online || groupInfo.online !== "y") {
       const group = await Group.findByIdAndUpdate(id, {
         ...groupInfo,
         online: "n",

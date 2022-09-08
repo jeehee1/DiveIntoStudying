@@ -14,7 +14,7 @@
           type="text"
           class="form-control"
           id="title"
-          name="title"
+          name="groups[title]"
           placeholder="title"
           value="<%=group.title %>"
           required
@@ -25,7 +25,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          name="online"
+          name="groups[online]"
           value="y"
           id="online"
           checked
@@ -34,7 +34,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          name="online"
+          name="groups[online]"
           value="y"
           id="online"
         />
@@ -48,7 +48,7 @@
             type="text"
             class="form-control"
             placeholder="subject"
-            name="subject"
+            name="groups[subject]"
             id="subject"
             value="<%=group.subject %>"
             required
@@ -60,7 +60,7 @@
             type="text"
             class="form-control"
             placeholder="/week"
-            name="times"
+            name="groups[times]"
             id="times"
             value="<%=group.times %>"
             required
@@ -73,7 +73,7 @@
           type="text"
           class="form-control"
           id="location"
-          name="location"
+          name="groups[location]"
           placeholder="location"
           value="<%=group.location %>"
           required
@@ -84,7 +84,7 @@
         <textarea
           class="form-control"
           id="description"
-          name="description"
+          name="groups[description]"
           required
         >
 <%=group.description %></textarea
