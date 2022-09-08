@@ -124,9 +124,9 @@ app.post(
   "/groups",
   validateGroups,
   catchAsync(async (req, res) => {
+    const { online } = req.body.groups;
     const newGroup = new Group(req.body.groups);
-    console.log(req.body);
-    if (req.body.online !== "y") {
+    if (!online) {
       newGroup.online = "n";
     }
     await newGroup.save();

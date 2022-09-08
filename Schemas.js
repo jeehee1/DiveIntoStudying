@@ -30,7 +30,7 @@ module.exports.groupSchema = Joi.object({
     subject: Joi.string().required().escapeHTML(),
     location: Joi.string().required().escapeHTML(),
     times: Joi.string().required().escapeHTML(),
-    online: Joi.string().escapeHTML().allow(null),
+    online: Joi.string().escapeHTML(),
     description: Joi.string().required().escapeHTML(),
   }).required(),
 });
