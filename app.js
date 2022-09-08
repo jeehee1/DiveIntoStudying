@@ -14,6 +14,7 @@ const { subjects } = require("./datas/seedHelpers");
 const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
 const { request } = require("https");
+const { groupSchema } = require("./Schemas");
 
 main().catch((err) => console.log(err));
 
@@ -68,6 +69,16 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
+const validateGroups = (req, res, next) => {
+  const { error } = groupSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(", ");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -111,8 +122,10 @@ app.get(
 
 app.post(
   "/groups",
+  validateGroups,
   catchAsync(async (req, res) => {
-    const newGroup = new Group(req.body);
+    const newGroup = new Group(req.body.groups);
+    console.log(req.body);
     if (req.body.online !== "y") {
       newGroup.online = "n";
     }
