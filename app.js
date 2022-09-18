@@ -79,6 +79,16 @@ const validateGroups = (req, res, next) => {
   }
 };
 
+const isLeader = async (req, res, next) => {
+  const { id } = req.params;
+  const group = await Group.findById(id);
+  if (!group.leader.equals(req.user._id)) {
+    req.flash("error", "You are not allowed to edit.");
+    res.redirect(`/groups/${group._id}`);
+  }
+  next();
+};
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -114,6 +124,7 @@ app.get(
 app.get(
   "/groups/:id/edit",
   isLoggedIn,
+  isLeader,
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
     res.render("groups/edit", { group });
