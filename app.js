@@ -84,7 +84,7 @@ const isLeader = async (req, res, next) => {
   const group = await Group.findById(id);
   if (!group.leader.equals(req.user._id)) {
     req.flash("error", "You are not allowed to edit.");
-    res.redirect(`/groups/${group._id}`);
+    return res.redirect(`/groups/${group._id}`);
   }
   next();
 };
@@ -148,6 +148,8 @@ app.post(
 
 app.put(
   "/groups/:id",
+  isLoggedIn,
+  isLeader,
   validateGroups,
   catchAsync(async (req, res) => {
     const { id } = req.params;
