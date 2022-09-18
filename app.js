@@ -108,8 +108,8 @@ app.get(
   "/groups/subjects/:subject",
   catchAsync(async (req, res) => {
     const { subject } = req.params;
-    const groups = await Group.find({ subject: subject });
-    res.render("groups/subjects", { groups, subject });
+    const groups = await Group.find({ subject });
+    res.render("groups/subjects", { groups, subject, subjects });
   })
 );
 

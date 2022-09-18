@@ -1,4 +1,8 @@
+<a href="/groups" class="btn btn-outline-secondary btn-sm mb-3">all</a>
 <% for(const subject of subjects) { %>
-<a href="/groups/<%=subject %>"><%=subject %> </a>
+<a
+  href="/groups/subjects/<%=subject %>"
+  class="btn btn-outline-secondary btn-sm mb-3"
+  ><%=subject %>
+</a>
 <% } %>
-<nav>Hello!</nav>
