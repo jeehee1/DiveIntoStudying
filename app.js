@@ -117,7 +117,11 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    res.render("groups/show", { group });
+    let showChangeBtn = false;
+    if (req.user) {
+      showChangeBtn = group.leader.equals(req.user._id);
+    }
+    res.render("groups/show", { group, showChangeBtn });
   })
 );
 
