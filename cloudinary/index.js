@@ -8,7 +8,7 @@ cloudinary.config({
 });
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary,
   params: {
     folder: "DIS",
     allowedFormats: ["jpeg", "png", "jpg"], // supports promises as well

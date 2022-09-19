@@ -1,3 +1,6 @@
+require("dotenv").config();
+console.log(process.env);
+
 const express = require("express");
 const engine = require("ejs-mate");
 const path = require("path");
@@ -16,7 +19,8 @@ const catchAsync = require("./utils/catchAsync");
 const { request } = require("https");
 const { groupSchema } = require("./Schemas");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { storage } = require("./cloudinary");
+const upload = multer({ storage });
 
 main().catch((err) => console.log(err));
 
@@ -145,10 +149,10 @@ app.get(
 
 app.post(
   "/groups",
+  isLoggedIn,
   upload.single("image"),
   validateGroup,
   catchAsync(async (req, res) => {
-    console.log(req.body);
     const { online } = req.body.group;
     const newGroup = new Group(req.body.group);
     if (!online) {
