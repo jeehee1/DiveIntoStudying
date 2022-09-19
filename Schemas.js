@@ -25,7 +25,7 @@ const extension = (joi) => ({
 const Joi = BaseJoi.extend(extension);
 
 module.exports.groupSchema = Joi.object({
-  groups: Joi.object({
+  group: Joi.object({
     title: Joi.string().required().escapeHTML(),
     subject: Joi.string().required().escapeHTML(),
     location: Joi.string().required().escapeHTML(),

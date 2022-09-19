@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { subjects } = require("../datas/seedHelpers");
 
+const imageSchema = new Schema({
+  url: String,
+  filename: String,
+});
+
 const groupSchema = new Schema({
   title: String,
   subject: {
@@ -15,6 +20,7 @@ const groupSchema = new Schema({
     type: String,
     enum: ["y", "n"],
   },
+  image: [imageSchema],
   description: String,
   leader: {
     type: Schema.Types.ObjectId,

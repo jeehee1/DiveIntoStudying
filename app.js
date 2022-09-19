@@ -15,6 +15,8 @@ const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
 const { request } = require("https");
 const { groupSchema } = require("./Schemas");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 main().catch((err) => console.log(err));
 
@@ -69,7 +71,8 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-const validateGroups = (req, res, next) => {
+const validateGroup = (req, res, next) => {
+  console.log(req.body);
   const { error } = groupSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(", ");
@@ -135,15 +138,23 @@ app.get(
   })
 );
 
+// app.post("/groups", upload.single("image"), (req, res) => {
+//   console.log(req.body, req.file);
+//   res.send("it worked?");
+// });
+
 app.post(
   "/groups",
-  validateGroups,
+  upload.single("image"),
+  validateGroup,
   catchAsync(async (req, res) => {
-    const { online } = req.body.groups;
-    const newGroup = new Group(req.body.groups);
+    console.log(req.body);
+    const { online } = req.body.group;
+    const newGroup = new Group(req.body.group);
     if (!online) {
       newGroup.online = "n";
     }
+    newGroup.image = { url: req.file.path, filename: req.file.filename };
     await newGroup.save();
     req.flash("success", "Study Group has been succesfully created!");
     res.redirect(`groups/${newGroup._id}`);
@@ -154,7 +165,7 @@ app.put(
   "/groups/:id",
   isLoggedIn,
   isLeader,
-  validateGroups,
+  validateGroup,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const groupInfo = req.body.groups;

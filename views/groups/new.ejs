@@ -2,14 +2,14 @@
 <div class="row">
   <h1 class="text-center my-5">New Study Group</h1>
   <div class="col-10 offset-1 col-md-8 offset-md-2">
-    <form action="/groups" method="POST" class="needs-validation" novalidate>
+    <form action="/groups" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
           type="text"
           class="form-control"
           id="title"
-          name="groups[title]"
+          name="group[title]"
           placeholder="title"
           required
         />
@@ -18,7 +18,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          name="groups[online]"
+          name="group[online]"
           value="y"
           id="online"
         />
@@ -31,7 +31,7 @@
             type="text"
             class="form-control"
             placeholder="subject"
-            name="groups[subject]"
+            name="group[subject]"
             id="subject"
             required
           />
@@ -42,7 +42,7 @@
             type="text"
             class="form-control"
             placeholder="/week"
-            name="groups[times]"
+            name="group[times]"
             id="times"
             required
           />
@@ -54,21 +54,32 @@
           type="text"
           class="form-control"
           id="location"
-          name="groups[location]"
+          name="group[location]"
           placeholder="location"
           required
         />
       </div>
+
+    <div class="mb-3">
+      <label for="image" class="form-label">Image</label>
+      <input
+        type="file"
+        class="form-control"
+        id="image"
+        name="image"
+      />
+    </div>
       <div class="mb-3">
         <label for="description">Description</label>
         <textarea
           class="form-control"
           id="description"
-          name="groups[description]"
+          name="group[description]"
           required
         ></textarea>
       </div>
       <button class="btn btn-success">Submit</button>
+    </div>
     </form>
   </div>
 </div>
