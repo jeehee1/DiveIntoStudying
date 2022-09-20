@@ -7,6 +7,7 @@
       method="POST"
       class="needs-validation"
       novalidate
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -14,7 +15,7 @@
           type="text"
           class="form-control"
           id="title"
-          name="groups[title]"
+          name="group[title]"
           placeholder="title"
           value="<%=group.title %>"
           required
@@ -25,7 +26,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          name="groups[online]"
+          name="group[online]"
           value="y"
           id="online"
           checked
@@ -34,7 +35,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          name="groups[online]"
+          name="group[online]"
           value="y"
           id="online"
         />
@@ -48,7 +49,7 @@
             type="text"
             class="form-control"
             placeholder="subject"
-            name="groups[subject]"
+            name="group[subject]"
             id="subject"
             value="<%=group.subject %>"
             required
@@ -60,7 +61,7 @@
             type="text"
             class="form-control"
             placeholder="/week"
-            name="groups[times]"
+            name="group[times]"
             id="times"
             value="<%=group.times %>"
             required
@@ -73,18 +74,22 @@
           type="text"
           class="form-control"
           id="location"
-          name="groups[location]"
+          name="group[location]"
           placeholder="location"
           value="<%=group.location %>"
           required
         />
       </div>
       <div class="mb-3">
+        <label for="image" class="form-label">Change image</label>
+        <input type="file" class="form-control" id="image" name="image" />
+      </div>
+      <div class="mb-3">
         <label for="description">Description</label>
         <textarea
           class="form-control"
           id="description"
-          name="groups[description]"
+          name="group[description]"
           required
         >
 <%=group.description %></textarea

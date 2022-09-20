@@ -1,5 +1,4 @@
 require("dotenv").config();
-console.log(process.env);
 
 const express = require("express");
 const engine = require("ejs-mate");
@@ -12,11 +11,9 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const Group = require("./models/groups");
 const User = require("./models/users");
-const { groupEnd } = require("console");
 const { subjects } = require("./datas/seedHelpers");
 const ExpressError = require("./utils/expressError");
 const catchAsync = require("./utils/catchAsync");
-const { request } = require("https");
 const { groupSchema } = require("./Schemas");
 const multer = require("multer");
 const { storage } = require("./cloudinary");
@@ -97,6 +94,7 @@ const isLeader = async (req, res, next) => {
 };
 
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
@@ -124,11 +122,7 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    let showChangeBtn = false;
-    if (req.user) {
-      showChangeBtn = group.leader.equals(req.user._id);
-    }
-    res.render("groups/show", { group, showChangeBtn });
+    res.render("groups/show", { group });
   })
 );
 
@@ -169,6 +163,7 @@ app.put(
   "/groups/:id",
   isLoggedIn,
   isLeader,
+  upload.single("image"),
   validateGroup,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -178,8 +173,16 @@ app.put(
         ...groupInfo,
         online: "n",
       });
+      if (req.file) {
+        group.image = { url: req.file.path, filename: req.file.filename };
+        await group.save();
+      }
     } else {
       const group = await Group.findByIdAndUpdate(id, groupInfo);
+      if (req.file) {
+        group.image = { url: req.file.path, filename: req.file.filename };
+        await group.save();
+      }
     }
     req.flash("success", "Study Group has been succesfully updated!");
     res.redirect(`/groups/${id}`);
