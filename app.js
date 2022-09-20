@@ -173,7 +173,7 @@ app.put(
   validateGroup,
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const groupInfo = req.body.groups;
+    const groupInfo = req.body.group;
     if (!groupInfo.online || groupInfo.online !== "y") {
       const group = await Group.findByIdAndUpdate(id, {
         ...groupInfo,
