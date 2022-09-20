@@ -152,7 +152,13 @@ app.post(
     if (!online) {
       newGroup.online = "n";
     }
-    newGroup.image = { url: req.file.path, filename: req.file.filename };
+    newGroup.image = req.file
+      ? { url: req.file.path, filename: req.file.filename }
+      : {
+          url: "https://images.unsplash.com/photo-1500989145603-8e7ef71d639e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c3R1ZHlpbmd8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+          filename: "temp",
+        };
+    newGroup.leader = req.user._id;
     await newGroup.save();
     req.flash("success", "Study Group has been succesfully created!");
     res.redirect(`groups/${newGroup._id}`);
