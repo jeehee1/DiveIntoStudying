@@ -27,7 +27,7 @@
           <a class="nav-link" href="#">Subject</a>
         </li>
       </ul>
-      <form class="d-flex">
+      <form class="d-flex me-5">
         <input
           class="form-control me-2"
           type="search"
@@ -36,6 +36,12 @@
         />
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+      <% if(currentUser){ %>
+      <a href="/logout" class="btn btn-success me-2">Logout</a>
+      <% } else{ %>
+      <a href="/login" class="btn btn-success me-2">Login</a>
+      <a href="/register" class="btn btn-secondary me-2">Register</a>
+      <% } %>
     </div>
   </div>
 </nav>
