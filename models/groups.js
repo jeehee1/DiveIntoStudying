@@ -20,7 +20,7 @@ const groupSchema = new Schema({
     type: String,
     enum: ["y", "n"],
   },
-  image: [imageSchema],
+  image: imageSchema,
   description: String,
   leader: {
     type: Schema.Types.ObjectId,

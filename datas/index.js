@@ -30,6 +30,10 @@ const seedDB = async () => {
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio ex repellendus labore rem eveniet sequi, repellat aliquam quia assumenda, nobis eos dolorem necessitatibus placeat tenetur error deleniti consectetur quam similique?",
       leader: "6316eb8c584ca4c72e2e744d",
+      image: {
+        url: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bGlicmFyeXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+        filename: "library",
+      },
     });
     await group.save();
   }

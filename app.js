@@ -122,6 +122,7 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
+    console.log(group.image.url);
     res.render("groups/show", { group });
   })
 );
