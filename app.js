@@ -122,8 +122,21 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id);
-    console.log(group.image.url);
     res.render("groups/show", { group });
+  })
+);
+
+app.get(
+  "/groups/:id/join",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    req.session.returnTo = `/groups/${id}`;
+    const group = await Group.findById(id);
+    group.members.push(req.user._id);
+    console.log(group);
+    await group.save();
+    res.redirect(`/groups/${id}`);
   })
 );
 

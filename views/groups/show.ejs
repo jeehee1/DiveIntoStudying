@@ -30,7 +30,10 @@
 
         <div class="card-body text-center">
           <a href="#" class="card-link">View members</a>
-          <a href="#" class="card-link">Join</a>
+          <!-- <form method="post" action="/groups/join"> -->
+            <a href="/groups/<%=group._id %>/join" class="card-link">Join</a>
+            <!-- <button>Join</button> -->
+          </form>
         </div>
       </div>
     </div>

@@ -26,6 +26,12 @@ const groupSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  members: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Group", groupSchema);
