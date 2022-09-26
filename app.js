@@ -121,7 +121,8 @@ app.get(
 app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
-    const group = await Group.findById(req.params.id);
+    const group = await Group.findById(req.params.id).populate("members");
+    console.log(group);
     res.render("groups/show", { group });
   })
 );
@@ -149,11 +150,6 @@ app.get(
     res.render("groups/edit", { group });
   })
 );
-
-// app.post("/groups", upload.single("image"), (req, res) => {
-//   console.log(req.body, req.file);
-//   res.send("it worked?");
-// });
 
 app.post(
   "/groups",

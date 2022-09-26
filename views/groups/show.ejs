@@ -1,7 +1,7 @@
 <% layout('../layouts/boilerplate') %>
 <div class="container-md">
   <div class="row">
-    <div class="col-6">
+    <div class="col-md-6">
       <div class="card">
         <img src="<%= group.image.url %>" class="card-img-top" alt="..." />
         <div class="card-body">
@@ -35,6 +35,18 @@
             <!-- <button>Join</button> -->
           </form>
         </div>
+      </div>
+    </div>
+    <div class="col-md-4 offset-md-1">
+      <div class="card">
+        <div class="card-header py-3 text-bold">
+          Members of <%=group.title %> 
+        </div>
+        <ul class="list-group list-group-flush">
+          <% for(const member of group.members) {%> 
+          <li class="list-group-item"><%=member.username %> </li>
+          <% } %> 
+        </ul>
       </div>
     </div>
   </div>
