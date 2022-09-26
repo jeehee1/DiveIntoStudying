@@ -133,9 +133,14 @@ app.get(
   catchAsync(async (req, res) => {
     const { id } = req.params;
     req.session.returnTo = `/groups/${id}`;
-    const group = await Group.findById(id);
+    const group = await Group.findById(id).populate("members");
+    for (const member of group.members) {
+      if (member._id.toString() === req.user._id.toString()) {
+        req.flash("error", "You are already a member of this group.");
+        return res.redirect(`/groups/${id}`);
+      }
+    }
     group.members.push(req.user._id);
-    console.log(group);
     await group.save();
     res.redirect(`/groups/${id}`);
   })
