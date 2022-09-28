@@ -70,6 +70,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.currentUrl = req.originalUrl;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
@@ -97,7 +98,6 @@ app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
     const group = await Group.findById(req.params.id).populate("members");
-    console.log(group);
     res.render("groups/show", { group });
   })
 );
@@ -211,12 +211,14 @@ app.post(
   }
 );
 
-app.get("/logout", (req, res) => {
+app.get("/logout", isLoggedIn, (req, res) => {
+  const redirectUrl = req.query.returnTo;
+  console.log(redirectUrl);
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect("/groups");
+    res.redirect(redirectUrl);
   });
 });
 
