@@ -17,6 +17,7 @@ const catchAsync = require("./utils/catchAsync");
 const { groupSchema } = require("./Schemas");
 const multer = require("multer");
 const { storage } = require("./cloudinary");
+const { isLoggedIn } = require("./middleware");
 const upload = multer({ storage });
 
 main().catch((err) => console.log(err));
@@ -61,16 +62,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-const isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    req.session.returnTo = req.originalUrl;
-    req.flash("error", "You must be signed in first");
-    return res.redirect("/login");
-  } else {
-    next();
-  }
-};
 
 const validateGroup = (req, res, next) => {
   console.log(req.body);
