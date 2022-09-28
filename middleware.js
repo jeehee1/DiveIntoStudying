@@ -1,3 +1,5 @@
+const Group = require("./models/groups");
+
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.returnTo = req.originalUrl;
@@ -25,6 +27,19 @@ module.exports.isLeader = async (req, res, next) => {
   if (!group.leader.equals(req.user._id)) {
     req.flash("error", "You are not allowed to edit.");
     return res.redirect(`/groups/${group._id}`);
+  }
+  next();
+};
+
+module.exports.isMember = async (req, res, next) => {
+  const { id } = req.params;
+  req.session.returnTo = `/groups/${id}`;
+  const group = await Group.findById(id).populate("members");
+  for (const member of group.members) {
+    if (member._id.toString() === req.user._id.toString()) {
+      req.flash("error", "You are already a member of this group.");
+      return res.redirect(`/groups/${id}`);
+    }
   }
   next();
 };

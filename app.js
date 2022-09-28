@@ -17,7 +17,12 @@ const catchAsync = require("./utils/catchAsync");
 const { groupSchema } = require("./Schemas");
 const multer = require("multer");
 const { storage } = require("./cloudinary");
-const { isLoggedIn } = require("./middleware");
+const {
+  isLoggedIn,
+  isLeader,
+  validateGroup,
+  isMember,
+} = require("./middleware");
 const upload = multer({ storage });
 
 main().catch((err) => console.log(err));
@@ -63,27 +68,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const validateGroup = (req, res, next) => {
-  console.log(req.body);
-  const { error } = groupSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(", ");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
-
-const isLeader = async (req, res, next) => {
-  const { id } = req.params;
-  const group = await Group.findById(id);
-  if (!group.leader.equals(req.user._id)) {
-    req.flash("error", "You are not allowed to edit.");
-    return res.redirect(`/groups/${group._id}`);
-  }
-  next();
-};
-
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
@@ -121,16 +105,10 @@ app.get(
 app.get(
   "/groups/:id/join",
   isLoggedIn,
+  isMember,
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    req.session.returnTo = `/groups/${id}`;
-    const group = await Group.findById(id).populate("members");
-    for (const member of group.members) {
-      if (member._id.toString() === req.user._id.toString()) {
-        req.flash("error", "You are already a member of this group.");
-        return res.redirect(`/groups/${id}`);
-      }
-    }
+    const group = await Group.findById(id);
     group.members.push(req.user._id);
     await group.save();
     res.redirect(`/groups/${id}`);
@@ -228,7 +206,6 @@ app.post(
   }),
   (req, res) => {
     req.flash("success", "Welcome Back!");
-    console.log(req.session.returnTo);
     const redirectUrl = req.session.returnTo || "/groups";
     res.redirect(redirectUrl);
   }
