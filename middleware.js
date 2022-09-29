@@ -36,6 +36,10 @@ module.exports.isMember = async (req, res, next) => {
   const { id } = req.params;
   req.session.returnTo = `/groups/${id}`;
   const group = await Group.findById(id).populate("members");
+  if (group.leader.equals(req.user._id)) {
+    req.flash("error", "You are a leader of this group.");
+    return res.redirect(`/groups/${id}/`);
+  }
   for (const member of group.members) {
     if (member._id.toString() === req.user._id.toString()) {
       req.flash("error", "You are already a member of this group.");
