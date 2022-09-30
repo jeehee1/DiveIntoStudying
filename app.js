@@ -184,6 +184,7 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+  req.session.returnTo = req.query.returnToUrl;
   res.render("users/login");
 });
 
@@ -206,7 +207,8 @@ app.post(
   }),
   (req, res) => {
     req.flash("success", "Welcome Back!");
-    const redirectUrl = req.session.returnTo || "/groups";
+    redirectUrl = req.session.returnTo;
+    req.session.returnTo = null;
     res.redirect(redirectUrl);
   }
 );
