@@ -179,6 +179,17 @@ app.put(
   })
 );
 
+app.delete(
+  "/groups/:id",
+  isLoggedIn,
+  isLeader,
+  catchAsync(async (req, res) => {
+    const group = await Group.findByIdAndDelete(req.params.id);
+    console.log(group);
+    res.redirect("/groups");
+  })
+);
+
 app.get("/register", (req, res) => {
   res.render("users/register");
 });

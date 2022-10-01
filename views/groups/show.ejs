@@ -23,7 +23,9 @@
               class="btn btn-secondary me-md-2"
               >Edit</a
             >
-            <a href="/" class="btn btn-danger">Delete</a>
+            <form action="/groups/<%=group._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-danger">Delete</button>
+            </form>
           </div>
           <% } %>
         </div>
