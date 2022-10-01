@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const router = express.Router();
 const engine = require("ejs-mate");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -24,6 +25,8 @@ const {
   isMember,
 } = require("./middleware");
 const upload = multer({ storage });
+
+const groupsRouter = require("./routers/groups");
 
 main().catch((err) => console.log(err));
 
@@ -75,6 +78,8 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
+
+app.use("/groups", groupsRouter);
 
 app.get("/groups", async (req, res) => {
   const groups = await Group.find({});
