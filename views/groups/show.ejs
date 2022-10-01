@@ -40,13 +40,14 @@
       </div>
     </div>
     <div class="col-md-4 offset-md-1">
-      <div class="card">
+      <div class="card mb-5">
         <div class="card-header py-3 text-bold">
-          Members of <%=group.title %> 
+          <span class="fs-4 fw-bold">Leader </span><span class="btn btn-outline-primary"><%=group.leader.username %></span> 
         </div>
-        <ul class="list-group list-group-flush">
+        <ul class="card-body">
+        <div class="pb-3 fs-5 fw-bold">members</div>
           <% for(const member of group.members) {%> 
-          <li class="list-group-item"><%=member.username %> </li>
+          <li class="btn btn-outline-primary btn-sm"><%=member.username %> </li>
           <% } %> 
         </ul>
       </div>

@@ -97,7 +97,9 @@ app.get(
 app.get(
   "/groups/:id",
   catchAsync(async (req, res) => {
-    const group = await Group.findById(req.params.id).populate("members");
+    const group = await Group.findById(req.params.id)
+      .populate("members")
+      .populate("leader");
     res.render("groups/show", { group });
   })
 );

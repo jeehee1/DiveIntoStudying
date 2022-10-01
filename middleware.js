@@ -1,4 +1,5 @@
 const Group = require("./models/groups");
+const { groupSchema } = require("./Schemas");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
